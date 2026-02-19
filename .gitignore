@@ -1,0 +1,22 @@
+## [Visual Studio]
+.vs/
+[Bb]in/
+[Oo]bj/
+*.user
+*.userosscache
+*.sln.doccache
+*.suo
+
+## [ASP.NET Core]
+appsettings.Development.json
+wwwroot/lib/
+/Properties/launchSettings.json
+
+## [Operating System]
+[Tt]humb[ss].db
+[Dd][Ss]_[Ss]tore
+desktop.ini
+
+## [Temporary]
+*.tmp
+*.log

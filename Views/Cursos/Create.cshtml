@@ -1,0 +1,82 @@
+@model SistemaGestionHorarios.Models.Curso
+
+@{
+    ViewData["Title"] = "Nuevo Curso";
+}
+
+<div class="row justify-content-center">
+    <div class="col-md-10 col-lg-7">
+        <div class="card border-0 shadow-sm mt-4">
+            <div class="card-header bg-white py-3 border-bottom-0">
+                <div class="d-flex align-items-center">
+                    <i class='bx bx-plus-circle text-primary me-2' style="font-size: 1.5rem;"></i>
+                    <h5 class="mb-0 fw-bold">Crear Nuevo Curso</h5>
+                </div>
+            </div>
+            <div class="card-body p-4 pt-0">
+                <form asp-action="Create">
+                    @if (!ViewData.ModelState.IsValid)
+                    {
+                        <div asp-validation-summary="All" class="alert alert-danger border-0 small mb-4"></div>
+                    }
+                    
+                    <div class="row g-3">
+                        <div class="col-12">
+                            <div class="form-group mb-3">
+                                <label asp-for="Nombre" class="form-label d-flex align-items-center">
+                                    <i class='bx bx-graduation me-1'></i> Nombre del Curso
+                                </label>
+                                <input asp-for="Nombre" class="form-control" placeholder="Ej. 1ro de Bachillerato, 6to Primaria..." />
+                                <span asp-validation-for="Nombre" class="text-danger small"></span>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="form-group mb-3">
+                                <label asp-for="Modalidad" class="form-label d-flex align-items-center">
+                                    <i class='bx bx-info-circle me-1'></i> Modalidad
+                                </label>
+                                <div class="input-group">
+                                    <input asp-for="Modalidad" id="modalidadInput" class="form-control border-end-0" placeholder="Ej. Primaria, Secundaria..." />
+                                    <button class="btn btn-outline-light border border-start-0 bg-white dropdown-toggle text-secondary" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <i class='bx bx-plus-circle text-primary'></i>
+                                    </button>
+                                    <ul class="dropdown-menu dropdown-menu-end shadow-sm border-0 py-2 mt-1" style="min-width: 200px;">
+                                        <li class="dropdown-header border-bottom mb-2 pb-2 text-primary fw-bold">
+                                            <i class='bx bx-list-check me-1'></i> Seleccionar Modalidad
+                                        </li>
+                                        <li><a class="dropdown-item py-2" href="javascript:void(0)" onclick="selectValue('modalidadInput', 'Inicial')">Inicial</a></li>
+                                        <li><a class="dropdown-item py-2" href="javascript:void(0)" onclick="selectValue('modalidadInput', 'Primaria')">Primaria</a></li>
+                                        <li><a class="dropdown-item py-2" href="javascript:void(0)" onclick="selectValue('modalidadInput', 'Media/Secundaria')">Media/Secundaria</a></li>
+                                        <li><a class="dropdown-item py-2" href="javascript:void(0)" onclick="selectValue('modalidadInput', 'Técnica')">Técnica</a></li>
+                                        <li><a class="dropdown-item py-2" href="javascript:void(0)" onclick="selectValue('modalidadInput', 'Universitaria')">Universitaria</a></li>
+                                    </ul>
+                                </div>
+                                <span asp-validation-for="Modalidad" class="text-danger small"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="d-flex justify-content-between mt-4 border-top pt-4">
+                        <a asp-action="Index" class="btn btn-light px-4">
+                            <i class='bx bx-chevron-left'></i> Volver
+                        </a>
+                        <button type="submit" class="btn btn-primary px-5 fw-bold">
+                            <i class='bx bx-save me-1'></i> Crear Curso
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+        function selectValue(inputId, value) {
+            document.getElementById(inputId).value = value;
+            document.getElementById(inputId).focus();
+        }
+    </script>
+}

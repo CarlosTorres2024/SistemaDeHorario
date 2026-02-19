@@ -1,0 +1,19 @@
+# Guía de Configuración Rápida - Sistema de Gestión de Horarios
+
+## 1. Base de Datos
+El sistema utiliza **SQL Server** (por defecto configurado para LocalDB). 
+Al iniciar la aplicación por primera vez, se creará automáticamente la base de datos `SistemaHorarios` (si no existe).
+Asegúrese de tener SQL Server o LocalDB instalado (`(localdb)\MSSQLLocalDB`).
+
+## 2. Generación de PDF (Rotativa)
+El sistema utiliza `Rotativa.AspNetCore` para generar reportes PDF. 
+Esta librería requiere que la carpeta `Rotativa` (que contiene el ejecutable `wkhtmltopdf.exe`) esté presente en la carpeta `wwwroot` o en la raíz, dependiendo de la configuración.
+Normalmente, el paquete NuGet debería copiar estos archivos, pero si obtiene un error al generar el PDF:
+1. Descargue `wkhtmltopdf` de https://wkhtmltopdf.org/downloads.html
+2. Copie el ejecutable a una carpeta llamada `Rotativa` dentro de `wwwroot` (o en la raíz del proyecto si falla).
+
+## 3. Ejecución
+Abra el proyecto en Visual Studio o ejecute desde la terminal:
+`dotnet run`
+
+Luego navegue a `https://localhost:5001` (o el puerto que se asigne).

@@ -1,0 +1,62 @@
+@model SistemaGestionHorarios.Models.Aula
+
+@{
+    ViewData["Title"] = "Editar Aula";
+}
+
+<div class="row justify-content-center">
+    <div class="col-md-10 col-lg-7">
+        <div class="card border-0 shadow-sm mt-4">
+            <div class="card-header bg-white py-3 border-bottom-0">
+                <div class="d-flex align-items-center">
+                    <i class='bx bx-edit text-primary me-2' style="font-size: 1.5rem;"></i>
+                    <h5 class="mb-0 fw-bold">Editar Aula</h5>
+                </div>
+            </div>
+            <div class="card-body p-4 pt-0">
+                <form asp-action="Edit">
+                    @if (!ViewData.ModelState.IsValid)
+                    {
+                        <div asp-validation-summary="All" class="alert alert-danger border-0 small mb-4"></div>
+                    }
+                    <input type="hidden" asp-for="IdAula" />
+
+                    <div class="row g-3">
+                        <div class="col-12">
+                            <div class="form-group mb-3">
+                                <label asp-for="NombreNumero" class="form-label d-flex align-items-center">
+                                    <i class='bx bx-door-open me-1'></i> Nombre o Número de Aula
+                                </label>
+                                <input asp-for="NombreNumero" class="form-control" placeholder="Ej. Aula 101, Laboratorio A..." />
+                                <span asp-validation-for="NombreNumero" class="text-danger small"></span>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="form-group mb-3">
+                                <label asp-for="Capacidad" class="form-label d-flex align-items-center">
+                                    <i class='bx bx-group me-1'></i> Capacidad (Personas)
+                                </label>
+                                <input asp-for="Capacidad" class="form-control" placeholder="Ej. 30" />
+                                <span asp-validation-for="Capacidad" class="text-danger small"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="d-flex justify-content-between mt-4 border-top pt-4">
+                        <a asp-action="Index" class="btn btn-light px-4">
+                            <i class='bx bx-chevron-left'></i> Volver
+                        </a>
+                        <button type="submit" class="btn btn-primary px-5 fw-bold">
+                            <i class='bx bx-save me-1'></i> Guardar Cambios
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

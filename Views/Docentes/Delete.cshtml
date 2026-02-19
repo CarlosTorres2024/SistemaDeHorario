@@ -1,0 +1,37 @@
+@model SistemaGestionHorarios.Models.Docente
+
+@{
+    ViewData["Title"] = "Eliminar Docente";
+}
+
+<div class="row justify-content-center">
+    <div class="col-md-8 col-lg-6">
+        <div class="card border-0 shadow-sm mt-5">
+            <div class="card-body p-5 text-center">
+                <div class="mb-4">
+                    <i class='bx bx-error-circle text-danger' style="font-size: 4rem;"></i>
+                </div>
+                <h3 class="fw-bold mb-2">¿Eliminar Docente?</h3>
+                <p class="text-secondary mb-4">Esta acción no se puede deshacer. Se eliminarán los datos de <strong>@Model.Nombre</strong>.</p>
+                
+                <div class="bg-light p-3 rounded mb-4 text-start">
+                    <div class="small text-muted mb-1">Especialidad:</div>
+                    <div class="fw-medium">@Model.Especialidad</div>
+                    <hr class="my-2">
+                    <div class="small text-muted mb-1">Carga Horaria:</div>
+                    <div class="fw-medium">@Model.HorasMaximas horas</div>
+                </div>
+
+                <form asp-action="Delete">
+                    <input type="hidden" asp-for="IdDocente" />
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-danger py-2 fw-bold">
+                            <i class='bx bx-trash me-1'></i> Sí, Eliminar Docente
+                        </button>
+                        <a asp-action="Index" class="btn btn-light py-2">Cancelar y Volver</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

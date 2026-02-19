@@ -1,0 +1,75 @@
+@model IEnumerable<SistemaGestionHorarios.Models.Asignatura>
+
+@{
+    ViewData["Title"] = "Asignaturas";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h1 class="h3 fw-bold mb-1">Listado de Asignaturas</h1>
+        <p class="text-secondary small">Gestión de materias y carga horaria semanal.</p>
+    </div>
+    <a asp-action="Create" class="btn btn-primary d-flex align-items-center">
+        <i class='bx bx-plus me-1'></i> Nueva Asignatura
+    </a>
+</div>
+
+<div class="card border-0 shadow-sm">
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="bg-light">
+                    <tr>
+                        <th class="ps-4">Asignatura</th>
+                        <th>Horas Semanales</th>
+                        <th class="text-end pe-4">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+            @foreach (var item in Model) {
+                    <tr>
+                        <td class="ps-4 fw-medium text-dark">
+                            <div class="d-flex align-items-center">
+                                <i class='bx bx-book text-secondary me-2' style="font-size: 1.2rem;"></i>
+                                @item.Nombre
+                            </div>
+                        </td>
+                        <td>
+                            <span class="badge bg-light text-dark fw-normal border">
+                                @item.HorasSemanales h / semana
+                            </span>
+                        </td>
+                        <td class="text-end pe-4">
+                            <div class="btn-group">
+                                <a asp-action="Edit" asp-route-id="@item.IdAsignatura" class="btn btn-outline-cyan btn-sm">
+                                    <i class='bx bx-edit-alt'></i>
+                                </a>
+                                <a asp-action="Delete" asp-route-id="@item.IdAsignatura" class="btn btn-outline-danger btn-sm">
+                                    <i class='bx bx-trash'></i>
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+            }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="mt-4 d-flex justify-content-center">
+    <a asp-controller="Home" asp-action="Index" class="btn btn-outline-cyan rounded-pill px-4 btn-sm d-flex align-items-center opacity-75 fw-600">
+        <i class='bx bx-home-alt me-1'></i> Volver al Inicio
+    </a>
+</div>
+
+<style>
+    .btn-outline-cyan {
+        color: var(--accent-color);
+        border-color: var(--accent-color);
+    }
+    .btn-outline-cyan:hover {
+        background-color: var(--accent-color);
+        color: white;
+    }
+</style>

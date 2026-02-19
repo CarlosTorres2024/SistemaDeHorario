@@ -1,0 +1,149 @@
+@model IEnumerable<SistemaGestionHorarios.Models.Horario>
+
+@{
+    ViewData["Title"] = "Horarios";
+    var dias = new[] { "Lunes", "Martes", "Miércoles", "Jueves", "Viernes" };
+    
+    // Definir bloques de tiempo (ejemplo de 7:30 a 14:00)
+    var bloques = new List<(TimeSpan Inicio, TimeSpan Fin)>();
+    var horaActual = new TimeSpan(7, 30, 0);
+    while (horaActual < new TimeSpan(14, 0, 0))
+    {
+        var fin = horaActual.Add(new TimeSpan(0, 50, 0)); // Bloques de 50 min
+        bloques.Add((horaActual, fin));
+        horaActual = fin.Add(new TimeSpan(0, 5, 0)); // 5 min de receso
+    }
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h1 class="h3 fw-bold mb-1">Horario Semanal</h1>
+        <p class="text-secondary small">Vista dinámica por bloques de tiempo y días.</p>
+    </div>
+    <a asp-action="Create" class="btn btn-primary d-flex align-items-center">
+        <i class='bx bx-plus me-1'></i> Agregar Clase
+    </a>
+</div>
+
+<!-- Sección de Filtros -->
+<div class="card border-0 shadow-sm mb-4">
+    <div class="card-body">
+        <form asp-action="Index" method="get" class="row g-3 align-items-end">
+            <div class="col-md-3">
+                <label class="form-label small fw-bold text-secondary">Filtrar por Docente</label>
+                <select name="idDocente" class="form-select" asp-items="ViewBag.IdDocente">
+                    <option value="">-- Todos los Docentes --</option>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <label class="form-label small fw-bold text-secondary">Filtrar por Aula</label>
+                <select name="idAula" class="form-select" asp-items="ViewBag.IdAula">
+                    <option value="">-- Todas las Aulas --</option>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <label class="form-label small fw-bold text-secondary">Filtrar por Grupo</label>
+                <select name="idGrupo" class="form-select" asp-items="ViewBag.IdGrupo">
+                    <option value="">-- Todos los Grupos --</option>
+                </select>
+            </div>
+            <div class="col-md-3 d-flex gap-2">
+                <button type="submit" class="btn btn-primary flex-grow-1">
+                    <i class='bx bx-filter-alt me-1'></i> Filtrar
+                </button>
+                <a asp-action="Index" class="btn btn-outline-secondary">
+                    <i class='bx bx-refresh'></i>
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="card border-0 shadow-sm">
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-bordered align-middle mb-0 text-center schedule-table">
+                <thead class="bg-light">
+                    <tr>
+                        <th style="width: 120px;">Hora</th>
+                        @foreach (var dia in dias)
+                        {
+                            <th>@dia</th>
+                        }
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var bloque in bloques)
+                    {
+                        <tr>
+                            <td class="bg-light fw-bold small">
+                                @bloque.Inicio.ToString(@"hh\:mm") - @bloque.Fin.ToString(@"hh\:mm")
+                            </td>
+                            @foreach (var dia in dias)
+                            {
+                                var clases = Model.Where(h => h.DiaSemana == dia && 
+                                                           h.HoraInicio >= bloque.Inicio && 
+                                                           h.HoraInicio < bloque.Fin).ToList();
+                                
+                                <td>
+                                    @foreach (var item in clases)
+                                    {
+                                        <div class="schedule-item-card p-2 mb-1 rounded shadow-sm">
+                                            <div class="fw-bold text-truncate small">@item.Asignatura?.Nombre</div>
+                                            <div class="text-secondary" style="font-size: 0.75rem;">@item.Docente?.Nombre</div>
+                                            <div class="text-primary fw-600" style="font-size: 0.7rem;">
+                                                <i class='bx bx-door-open'></i> @item.Aula?.NombreNumero
+                                            </div>
+                                            <div class="mt-1">
+                                                <a asp-action="Edit" asp-route-id="@item.IdHorario" class="text-cyan me-1"><i class='bx bx-edit-alt'></i></a>
+                                                <a asp-action="Delete" asp-route-id="@item.IdHorario" class="text-danger"><i class='bx bx-trash'></i></a>
+                                            </div>
+                                        </div>
+                                    }
+                                </td>
+                            }
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="mt-4 d-flex justify-content-center">
+    <a asp-controller="Home" asp-action="Index" class="btn btn-outline-cyan rounded-pill px-4 btn-sm d-flex align-items-center opacity-75 fw-600">
+        <i class='bx bx-home-alt me-1'></i> Volver al Inicio
+    </a>
+</div>
+
+<style>
+    .schedule-table th {
+        background-color: #f8f9fa;
+        font-weight: 600;
+        text-transform: uppercase;
+        font-size: 0.85rem;
+        letter-spacing: 0.5px;
+    }
+    .schedule-item-card {
+        background-color: #e3f2fd;
+        border-left: 4px solid #0d6efd;
+        min-height: 80px;
+        text-align: left;
+    }
+    .text-cyan { color: #0891b2; }
+    .btn-outline-cyan {
+        color: #0891b2;
+        border-color: #0891b2;
+    }
+</style>
+
+<style>
+    .btn-outline-cyan {
+        color: var(--accent-color);
+        border-color: var(--accent-color);
+    }
+    .btn-outline-cyan:hover {
+        background-color: var(--accent-color);
+        color: white;
+    }
+</style>

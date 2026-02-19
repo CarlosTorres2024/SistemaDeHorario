@@ -1,0 +1,109 @@
+@model SistemaGestionHorarios.Models.Docente
+
+@{
+    ViewData["Title"] = "Nuevo Docente";
+}
+
+<div class="row justify-content-center">
+    <div class="col-md-10 col-lg-7">
+        <div class="card border-0 shadow-sm mt-4">
+            <div class="card-header bg-white py-3 border-bottom-0">
+                <div class="d-flex align-items-center">
+                    <i class='bx bx-user-plus text-primary me-2' style="font-size: 1.5rem;"></i>
+                    <h5 class="mb-0 fw-bold">Registrar Nuevo Docente</h5>
+                </div>
+            </div>
+            <div class="card-body p-4 pt-0">
+                <form asp-action="Create">
+                    @if (!ViewData.ModelState.IsValid)
+                    {
+                        <div asp-validation-summary="All" class="alert alert-danger border-0 small mb-4"></div>
+                    }
+                    
+                    <div class="row g-3">
+                        <div class="col-12">
+                            <div class="form-group mb-3">
+                                <label asp-for="Nombre" class="form-label d-flex align-items-center">
+                                    <i class='bx bx-user me-1'></i> Nombre Completo
+                                </label>
+                                <input asp-for="Nombre" class="form-control" placeholder="Ej. Juan Pérez" />
+                                <span asp-validation-for="Nombre" class="text-danger small"></span>
+                            </div>
+                        </div>
+
+                        <div class="col-md-8">
+                            <div class="form-group mb-3">
+                                <label asp-for="Especialidad" class="form-label d-flex align-items-center">
+                                    <i class='bx bx-bookmark-alt me-1'></i> Especialidad
+                                </label>
+                                <div class="input-group">
+                                    <input asp-for="Especialidad" id="especialidadInput" class="form-control border-end-0" placeholder="Ej. Matemáticas, Ciencias..." />
+                                    <button class="btn btn-outline-light border border-start-0 bg-white dropdown-toggle text-secondary" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <i class='bx bx-plus-circle text-primary'></i>
+                                    </button>
+                                    <ul class="dropdown-menu dropdown-menu-end shadow-sm border-0 py-2 mt-1" style="max-height: 250px; overflow-y: auto; min-width: 250px;">
+                                        <li class="dropdown-header border-bottom mb-2 pb-2 text-primary fw-bold">
+                                            <i class='bx bx-list-ul me-1'></i> Sugerir Asignatura
+                                        </li>
+                                        @if (ViewBag.Asignaturas != null)
+                                        {
+                                            foreach (var asignatura in (IEnumerable<SistemaGestionHorarios.Models.Asignatura>)ViewBag.Asignaturas)
+                                            {
+                                                <li><a class="dropdown-item py-2 d-flex align-items-center" href="javascript:void(0)" onclick="appendAsignatura('@asignatura.Nombre')">
+                                                    <i class='bx bx-plus me-2 text-muted small'></i> @asignatura.Nombre
+                                                </a></li>
+                                            }
+                                            if (!((IEnumerable<SistemaGestionHorarios.Models.Asignatura>)ViewBag.Asignaturas).Any())
+                                            {
+                                                <li><span class="dropdown-item text-muted small px-3">No hay asignaturas creadas</span></li>
+                                            }
+                                        }
+                                    </ul>
+                                </div>
+                                <span asp-validation-for="Especialidad" class="text-danger small"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group mb-3">
+                                <label asp-for="HorasMaximas" class="form-label d-flex align-items-center">
+                                    <i class='bx bx-time me-1'></i> Horas Máx.
+                                </label>
+                                <input asp-for="HorasMaximas" class="form-control" placeholder="Ej. 20" />
+                                <span asp-validation-for="HorasMaximas" class="text-danger small"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="d-flex justify-content-between mt-4 border-top pt-4">
+                        <a asp-action="Index" class="btn btn-light px-4">
+                            <i class='bx bx-chevron-left'></i> Volver
+                        </a>
+                        <button type="submit" class="btn btn-primary px-5 fw-bold">
+                            <i class='bx bx-save me-1'></i> Registrar Docente
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    
+    <script>
+        function appendAsignatura(nombre) {
+            const input = document.getElementById('especialidadInput');
+            const currentVal = input.value.trim();
+            if (currentVal === "") {
+                input.value = nombre;
+            } else {
+                const parts = currentVal.split(',').map(s => s.trim());
+                if (!parts.includes(nombre)) {
+                    input.value = currentVal + ", " + nombre;
+                }
+            }
+            input.focus();
+        }
+    </script>
+}

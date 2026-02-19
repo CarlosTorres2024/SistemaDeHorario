@@ -1,0 +1,115 @@
+@model SistemaGestionHorarios.Models.Horario
+
+@{
+    ViewData["Title"] = "Editar Horario";
+}
+
+<div class="row justify-content-center">
+    <div class="col-md-10 col-lg-8">
+        <div class="card border-0 shadow-sm mt-4">
+            <div class="card-header bg-white py-3 border-bottom-0">
+                <div class="d-flex align-items-center">
+                    <i class='bx bx-edit-alt text-primary me-2' style="font-size: 1.5rem;"></i>
+                    <h5 class="mb-0 fw-bold">Editar Horario</h5>
+                </div>
+            </div>
+            <div class="card-body p-4 pt-0">
+                <form asp-action="Edit">
+                    @if (!ViewData.ModelState.IsValid)
+                    {
+                        <div asp-validation-summary="All" class="alert alert-danger border-0 small mb-4"></div>
+                    }
+                    <input type="hidden" asp-for="IdHorario" />
+
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <div class="form-group mb-3">
+                                <label asp-for="IdDocente" class="form-label d-flex align-items-center">
+                                    <i class='bx bx-user me-1'></i> Docente
+                                </label>
+                                <select asp-for="IdDocente" class="form-control" asp-items="ViewBag.IdDocente"></select>
+                                <span asp-validation-for="IdDocente" class="text-danger small"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group mb-3">
+                                <label asp-for="IdAsignatura" class="form-label d-flex align-items-center">
+                                    <i class='bx bx-book me-1'></i> Asignatura
+                                </label>
+                                <select asp-for="IdAsignatura" class="form-control" asp-items="ViewBag.IdAsignatura"></select>
+                                <span asp-validation-for="IdAsignatura" class="text-danger small"></span>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="form-group mb-3">
+                                <label asp-for="IdAula" class="form-label d-flex align-items-center">
+                                    <i class='bx bx-door-open me-1'></i> Aula
+                                </label>
+                                <select asp-for="IdAula" class="form-control" asp-items="ViewBag.IdAula"></select>
+                                <span asp-validation-for="IdAula" class="text-danger small"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group mb-3">
+                                <label asp-for="IdGrupo" class="form-label d-flex align-items-center">
+                                    <i class='bx bx-group me-1'></i> Grupo
+                                </label>
+                                <select asp-for="IdGrupo" class="form-control" asp-items="ViewBag.IdGrupo"></select>
+                                <span asp-validation-for="IdGrupo" class="text-danger small"></span>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <div class="form-group mb-3">
+                                <label asp-for="DiaSemana" class="form-label d-flex align-items-center">
+                                    <i class='bx bx-calendar-event me-1'></i> Día
+                                </label>
+                                <select asp-for="DiaSemana" class="form-control">
+                                    <option value="Lunes">Lunes</option>
+                                    <option value="Martes">Martes</option>
+                                    <option value="Miércoles">Miércoles</option>
+                                    <option value="Jueves">Jueves</option>
+                                    <option value="Viernes">Viernes</option>
+                                    <option value="Sábado">Sábado</option>
+                                </select>
+                                <span asp-validation-for="DiaSemana" class="text-danger small"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group mb-3">
+                                <label asp-for="HoraInicio" class="form-label d-flex align-items-center">
+                                    <i class='bx bx-time me-1'></i> Inicio
+                                </label>
+                                <input asp-for="HoraInicio" class="form-control" type="time" />
+                                <span asp-validation-for="HoraInicio" class="text-danger small"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group mb-3">
+                                <label asp-for="HoraFin" class="form-label d-flex align-items-center">
+                                    <i class='bx bx-time-five me-1'></i> Fin
+                                </label>
+                                <input asp-for="HoraFin" class="form-control" type="time" />
+                                <span asp-validation-for="HoraFin" class="text-danger small"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="d-flex justify-content-between mt-4 border-top pt-4">
+                        <a asp-action="Index" class="btn btn-light px-4">
+                            <i class='bx bx-chevron-left'></i> Volver
+                        </a>
+                        <button type="submit" class="btn btn-primary px-5 fw-bold">
+                            <i class='bx bx-save me-1'></i> Guardar Cambios
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

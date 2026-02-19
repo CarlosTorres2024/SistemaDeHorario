@@ -1,0 +1,73 @@
+﻿@{
+    ViewData["Title"] = "Inicio";
+}
+
+<div class="py-5">
+    <div class="mb-5">
+        <h1 class="h3 fw-bold mb-1">Sistema de Horarios</h1>
+        <p class="text-secondary small">Seleccione una categoría para comenzar a gestionar.</p>
+    </div>
+
+    <div class="row g-3">
+        <div class="col-md-6 col-lg-3">
+            <a asp-controller="Horarios" asp-action="Index" class="d-block p-4 bg-white border rounded text-decoration-none text-dark hover-subtle">
+                <i class='bx bx-calendar mb-2 d-block text-secondary' style="font-size: 1.5rem;"></i>
+                <span class="fw-semibold">Horarios</span>
+                <small class="d-block text-secondary mt-1">Ver y editar calendario</small>
+            </a>
+        </div>
+        <div class="col-md-6 col-lg-3">
+            <a asp-controller="Docentes" asp-action="Index" class="d-block p-4 bg-white border rounded text-decoration-none text-dark hover-subtle">
+                <i class='bx bx-user mb-2 d-block text-secondary' style="font-size: 1.5rem;"></i>
+                <span class="fw-semibold">Docentes</span>
+                <small class="d-block text-secondary mt-1">Lista de profesores</small>
+            </a>
+        </div>
+        <div class="col-md-6 col-lg-3">
+            <a asp-controller="Asignaturas" asp-action="Index" class="d-block p-4 bg-white border rounded text-decoration-none text-dark hover-subtle">
+                <i class='bx bx-book mb-2 d-block text-secondary' style="font-size: 1.5rem;"></i>
+                <span class="fw-semibold">Asignaturas</span>
+                <small class="d-block text-secondary mt-1">Materias y créditos</small>
+            </a>
+        </div>
+        <div class="col-md-6 col-lg-3">
+            <a asp-controller="Aulas" asp-action="Index" class="d-block p-4 bg-white border rounded text-decoration-none text-dark hover-subtle">
+                <i class='bx bx-door-open mb-2 d-block text-secondary' style="font-size: 1.5rem;"></i>
+                <span class="fw-semibold">Aulas</span>
+                <small class="d-block text-secondary mt-1">Gestión de espacios</small>
+            </a>
+        </div>
+        <div class="col-md-6 col-lg-3">
+            <a asp-controller="Grupos" asp-action="Index" class="d-block p-4 bg-white border rounded text-decoration-none text-dark hover-subtle">
+                <i class='bx bx-group mb-2 d-block text-secondary' style="font-size: 1.5rem;"></i>
+                <span class="fw-semibold">Grupos</span>
+                <small class="d-block text-secondary mt-1">Gestión de grupos</small>
+            </a>
+        </div>
+        <div class="col-md-6 col-lg-3">
+            <a asp-controller="Cursos" asp-action="Index" class="d-block p-4 bg-white border rounded text-decoration-none text-dark hover-subtle">
+                <i class='bx bx-book-content mb-2 d-block text-secondary' style="font-size: 1.5rem;"></i>
+                <span class="fw-semibold">Cursos</span>
+                <small class="d-block text-secondary mt-1">Grados académicos</small>
+            </a>
+        </div>
+        <div class="col-md-6 col-lg-3">
+            <a asp-controller="Centros" asp-action="Index" class="d-block p-4 bg-white border rounded text-decoration-none text-dark hover-subtle">
+                <i class='bx bx-building-house mb-2 d-block text-secondary' style="font-size: 1.5rem;"></i>
+                <span class="fw-semibold">Centros</span>
+                <small class="d-block text-secondary mt-1">Instituciones</small>
+            </a>
+        </div>
+    </div>
+
+</div>
+
+<style>
+    .hover-subtle {
+        transition: background-color 0.2s ease, border-color 0.2s ease;
+    }
+    .hover-subtle:hover {
+        background-color: #f8fafc !important;
+        border-color: #cbd5e1 !important;
+    }
+</style>
