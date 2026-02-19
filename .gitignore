@@ -9,7 +9,7 @@
 
 ## [ASP.NET Core]
 appsettings.Development.json
-wwwroot/lib/
+# wwwroot/lib/
 /Properties/launchSettings.json
 
 ## [Operating System]
