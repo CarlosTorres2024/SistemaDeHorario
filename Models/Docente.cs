@@ -10,15 +10,15 @@ namespace SistemaGestionHorarios.Models
         [Key]
         public int IdDocente { get; set; }
 
-        [Required(ErrorMessage = "El nombre es obligatorio")]
+        [Required(ErrorMessage = "El nombre del docente es necesario.")]
         [Display(Name = "Nombre Completo")]
         public string Nombre { get; set; }
 
         [Display(Name = "Especialidad")]
         public string? Especialidad { get; set; }
 
-        [Required(ErrorMessage = "Las horas máximas son obligatorias")]
-        [Range(1, 60, ErrorMessage = "Las horas deben estar entre 1 y 60")]
+        [Required(ErrorMessage = "Las horas máximas permitidas son obligatorias.")]
+        [Range(1, 60, ErrorMessage = "La cantidad de horas debe estar comprendida entre 1 y 60.")]
         [Display(Name = "Horas Máximas Semanales")]
         public int HorasMaximas { get; set; }
 

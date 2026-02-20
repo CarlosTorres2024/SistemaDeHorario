@@ -35,6 +35,15 @@ app.UseStaticFiles(new StaticFileOptions
     }
 });
 
+// Configurar Localización en Español
+var supportedCultures = new[] { "es-DO", "es-ES", "es" };
+var localizationOptions = new RequestLocalizationOptions()
+    .SetDefaultCulture(supportedCultures[0])
+    .AddSupportedCultures(supportedCultures)
+    .AddSupportedUICultures(supportedCultures);
+
+app.UseRequestLocalization(localizationOptions);
+
 if (!app.Environment.IsDevelopment())
 {
     app.UseResponseCompression();

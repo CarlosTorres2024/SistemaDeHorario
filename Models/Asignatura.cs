@@ -10,12 +10,12 @@ namespace SistemaGestionHorarios.Models
         [Key]
         public int IdAsignatura { get; set; }
 
-        [Required(ErrorMessage = "El nombre es obligatorio")]
+        [Required(ErrorMessage = "Por favor, indique el nombre de la asignatura.")]
         [Display(Name = "Nombre de la Asignatura")]
         public string Nombre { get; set; }
 
-        [Required]
-        [Range(1, 20, ErrorMessage = "Las horas semanales deben ser válidas")]
+        [Required(ErrorMessage = "Debe especificar la cantidad de horas semanales.")]
+        [Range(1, 20, ErrorMessage = "Las horas semanales deben estar entre 1 y 20.")]
         [Display(Name = "Horas Semanales")]
         public int HorasSemanales { get; set; }
 

@@ -10,7 +10,7 @@ namespace SistemaGestionHorarios.Models
         [Key]
         public int IdCentro { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "El nombre del centro educativo es fundamental.")]
         [Display(Name = "Nombre del Centro")]
         public string Nombre { get; set; }
 

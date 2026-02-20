@@ -10,11 +10,11 @@ namespace SistemaGestionHorarios.Models
         [Key]
         public int IdGrupo { get; set; }
 
-        [Required(ErrorMessage = "El nombre del grupo es obligatorio")]
+        [Required(ErrorMessage = "Por favor, asigne un nombre al grupo.")]
         [Display(Name = "Nombre del Grupo")]
         public string Nombre { get; set; }
 
-        [Required(ErrorMessage = "El nivel educativo es obligatorio")]
+        [Required(ErrorMessage = "El nivel educativo es un dato requerido.")]
         [Display(Name = "Nivel Educativo")]
         public string? NivelEducativo { get; set; }
 

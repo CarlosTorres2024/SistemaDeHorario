@@ -74,7 +74,7 @@ namespace SistemaGestionHorarios.Controllers
                 else if (await ExceedsMaxHoursAsync(horario))
                 {
                     var docente = await _context.Docentes.FindAsync(horario.IdDocente);
-                    ModelState.AddModelError(string.Empty, $"El docente superaría sus horas máximas ({docente?.HorasMaximas}).");
+                    ModelState.AddModelError(string.Empty, $"Lo sentimos, el docente ya ha alcanzado o superaría su límite de horas semanales ({docente?.HorasMaximas} horas).");
                 }
                 else
                 {
@@ -123,7 +123,7 @@ namespace SistemaGestionHorarios.Controllers
                 else if (await ExceedsMaxHoursAsync(horario))
                 {
                     var docente = await _context.Docentes.FindAsync(horario.IdDocente);
-                    ModelState.AddModelError(string.Empty, $"El docente superaría sus horas máximas ({docente?.HorasMaximas}).");
+                    ModelState.AddModelError(string.Empty, $"Atención: El docente superaría su límite establecido de {docente?.HorasMaximas} horas semanales.");
                 }
                 else
                 {
@@ -207,20 +207,20 @@ namespace SistemaGestionHorarios.Controllers
 
             if (conflict.IdDocente == newHorario.IdDocente)
             {
-                return $"Conflicto de Docente: {conflict.Docente?.Nombre} ya tiene clase '{conflict.Asignatura?.Nombre}' con el grupo {conflict.Grupo?.Nombre} el {conflict.DiaSemana} de {conflict.HoraInicio:hh\\:mm} a {conflict.HoraFin:hh\\:mm}.";
+                return $"Conflicto con el Docente: {conflict.Docente?.Nombre} ya se encuentra impartiendo '{conflict.Asignatura?.Nombre}' al grupo {conflict.Grupo?.Nombre} el día {conflict.DiaSemana} de {conflict.HoraInicio:hh\\:mm} a {conflict.HoraFin:hh\\:mm}.";
             }
             
             if (newHorario.IdAula != null && conflict.IdAula == newHorario.IdAula)
             {
-                return $"Conflicto de Aula: El aula {conflict.Aula?.NombreNumero} ya está ocupada por '{conflict.Asignatura?.Nombre}' (Grupo {conflict.Grupo?.Nombre}) de {conflict.HoraInicio:hh\\:mm} a {conflict.HoraFin:hh\\:mm}.";
+                return $"Conflicto con el Aula: El aula {conflict.Aula?.NombreNumero} ya está reservada para '{conflict.Asignatura?.Nombre}' (Grupo {conflict.Grupo?.Nombre}) de {conflict.HoraInicio:hh\\:mm} a {conflict.HoraFin:hh\\:mm}.";
             }
-
+ 
             if (newHorario.IdGrupo != null && conflict.IdGrupo == newHorario.IdGrupo)
             {
-                return $"Conflicto de Grupo: El grupo {conflict.Grupo?.Nombre} ya tiene la materia '{conflict.Asignatura?.Nombre}' en este horario ({conflict.HoraInicio:hh\\:mm} - {conflict.HoraFin:hh\\:mm}).";
+                return $"Conflicto con el Grupo: El grupo {conflict.Grupo?.Nombre} ya tiene programada la materia '{conflict.Asignatura?.Nombre}' en este horario ({conflict.HoraInicio:hh\\:mm} - {conflict.HoraFin:hh\\:mm}).";
             }
-
-            return "Existe un conflicto de horario con otra asignación.";
+ 
+            return "Lo sentimos, existe un conflicto de horario con otra asignación ya registrada en el sistema.";
         }
 
         /// <summary>

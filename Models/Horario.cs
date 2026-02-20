@@ -11,14 +11,14 @@ namespace SistemaGestionHorarios.Models
         [Key]
         public int IdHorario { get; set; }
 
-        [Required(ErrorMessage = "El docente es obligatorio")]
+        [Required(ErrorMessage = "Debe seleccionar un docente.")]
         [Display(Name = "Docente")]
         public int IdDocente { get; set; }
 
         [ForeignKey("IdDocente")]
         public Docente? Docente { get; set; }
 
-        [Required(ErrorMessage = "La asignatura es obligatoria")]
+        [Required(ErrorMessage = "La asignatura es requerida para este horario.")]
         [Display(Name = "Asignatura")]
         public int IdAsignatura { get; set; }
 
@@ -37,16 +37,16 @@ namespace SistemaGestionHorarios.Models
         [ForeignKey("IdGrupo")]
         public Grupo? Grupo { get; set; }
 
-        [Required(ErrorMessage = "El día de la semana es obligatorio")]
+        [Required(ErrorMessage = "Indique el día de la semana para esta clase.")]
         [Display(Name = "Día de la Semana")]
         public string DiaSemana { get; set; } // Lunes, Martes, etc.
 
-        [Required(ErrorMessage = "La hora de inicio es obligatoria")]
+        [Required(ErrorMessage = "Especifique a qué hora inicia la clase.")]
         [DataType(DataType.Time)]
         [Display(Name = "Hora Inicio")]
         public TimeSpan HoraInicio { get; set; }
 
-        [Required(ErrorMessage = "La hora de fin es obligatoria")]
+        [Required(ErrorMessage = "Especifique a qué hora termina la clase.")]
         [DataType(DataType.Time)]
         [Display(Name = "Hora Fin")]
         public TimeSpan HoraFin { get; set; }
