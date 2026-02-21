@@ -24,6 +24,7 @@ namespace SistemaGestionHorarios.Controllers
 
         public IActionResult Create()
         {
+            if (Request.Headers["X-Requested-With"] == "XMLHttpRequest") return PartialView();
             return View();
         }
 
@@ -33,10 +34,35 @@ namespace SistemaGestionHorarios.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(asignatura);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                // Validación de calidad de datos
+                if (asignatura.Nombre.Length < 3)
+                {
+                    ModelState.AddModelError("Nombre", "El nombre de la asignatura debe tener al menos 3 caracteres.");
+                }
+                // Validación de duplicado
+                else if (_context.Asignaturas.Any(a => a.Nombre.ToLower() == asignatura.Nombre.ToLower()))
+                {
+                    ModelState.AddModelError("Nombre", "Esta asignatura ya se encuentra registrada.");
+                }
+                else
+                {
+                    _context.Add(asignatura);
+                    await _context.SaveChangesAsync();
+                    
+                    if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+                    {
+                        return Json(new { success = true, id = asignatura.IdAsignatura, name = asignatura.Nombre });
+                    }
+                    
+                    return RedirectToAction(nameof(Index));
+                }
             }
+            
+            if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+            {
+                return PartialView(asignatura);
+            }
+            
             return View(asignatura);
         }
 
@@ -57,17 +83,30 @@ namespace SistemaGestionHorarios.Controllers
 
             if (ModelState.IsValid)
             {
-                try
+                // Validación de calidad de datos
+                if (asignatura.Nombre.Length < 3)
                 {
-                    _context.Update(asignatura);
-                    await _context.SaveChangesAsync();
+                    ModelState.AddModelError("Nombre", "El nombre de la asignatura debe tener al menos 3 caracteres.");
                 }
-                catch (DbUpdateConcurrencyException)
+                // Validación de duplicado
+                else if (_context.Asignaturas.Any(a => a.Nombre.ToLower() == asignatura.Nombre.ToLower() && a.IdAsignatura != asignatura.IdAsignatura))
                 {
-                    if (!AsignaturaExists(asignatura.IdAsignatura)) return NotFound();
-                    else throw;
+                    ModelState.AddModelError("Nombre", "Ya existe otra asignatura con este nombre.");
                 }
-                return RedirectToAction(nameof(Index));
+                else
+                {
+                    try
+                    {
+                        _context.Update(asignatura);
+                        await _context.SaveChangesAsync();
+                    }
+                    catch (DbUpdateConcurrencyException)
+                    {
+                        if (!AsignaturaExists(asignatura.IdAsignatura)) return NotFound();
+                        else throw;
+                    }
+                    return RedirectToAction(nameof(Index));
+                }
             }
             return View(asignatura);
         }

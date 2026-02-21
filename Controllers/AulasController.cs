@@ -21,6 +21,7 @@ namespace SistemaGestionHorarios.Controllers
 
         public IActionResult Create()
         {
+            if (Request.Headers["X-Requested-With"] == "XMLHttpRequest") return PartialView();
             return View();
         }
 
@@ -30,10 +31,35 @@ namespace SistemaGestionHorarios.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(aula);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                // Validación de calidad de datos
+                if (aula.NombreNumero.Length < 3)
+                {
+                    ModelState.AddModelError("NombreNumero", "El nombre del aula debe tener al menos 3 caracteres.");
+                }
+                // Validación de duplicado
+                else if (_context.Aulas.Any(a => a.NombreNumero.ToLower() == aula.NombreNumero.ToLower()))
+                {
+                    ModelState.AddModelError("NombreNumero", "Ya existe un aula registrada con este nombre.");
+                }
+                else
+                {
+                    _context.Add(aula);
+                    await _context.SaveChangesAsync();
+                    
+                    if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+                    {
+                        return Json(new { success = true, id = aula.IdAula, name = aula.NombreNumero });
+                    }
+                    
+                    return RedirectToAction(nameof(Index));
+                }
             }
+            
+            if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+            {
+                return PartialView(aula);
+            }
+            
             return View(aula);
         }
 
@@ -54,17 +80,30 @@ namespace SistemaGestionHorarios.Controllers
 
             if (ModelState.IsValid)
             {
-                try
+                // Validación de calidad de datos
+                if (aula.NombreNumero.Length < 3)
                 {
-                    _context.Update(aula);
-                    await _context.SaveChangesAsync();
+                    ModelState.AddModelError("NombreNumero", "El nombre del aula debe tener al menos 3 caracteres.");
                 }
-                catch (DbUpdateConcurrencyException)
+                // Validación de duplicado
+                else if (_context.Aulas.Any(a => a.NombreNumero.ToLower() == aula.NombreNumero.ToLower() && a.IdAula != aula.IdAula))
                 {
-                    if (!AulaExists(aula.IdAula)) return NotFound();
-                    else throw;
+                    ModelState.AddModelError("NombreNumero", "Ya existe otra aula con este nombre.");
                 }
-                return RedirectToAction(nameof(Index));
+                else
+                {
+                    try
+                    {
+                        _context.Update(aula);
+                        await _context.SaveChangesAsync();
+                    }
+                    catch (DbUpdateConcurrencyException)
+                    {
+                        if (!AulaExists(aula.IdAula)) return NotFound();
+                        else throw;
+                    }
+                    return RedirectToAction(nameof(Index));
+                }
             }
             return View(aula);
         }

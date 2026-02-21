@@ -27,13 +27,6 @@
         <h1>Sistema de Gestión de Horarios</h1>
         <h2>Reporte General</h2>
         <br />
-        @if (Model.Centro != null)
-        {
-            <h3>@Model.Centro.Nombre</h3>
-            <p>@Model.Centro.Dirección</p>
-            <p>@Model.Centro.Teléfono</p>
-        }
-        <br />
         <p><strong>Fecha de Generación:</strong> @Model.FechaGeneracion.ToString("dd/MM/yyyy HH:mm")</p>
     </div>
 
@@ -81,27 +74,13 @@
 
         <div class="section-break"></div>
 
-        <h2>Cursos y Grupos</h2>
-        <div class="row">
-            <div class="col-6">
-                <h3>Cursos</h3>
-                <ul>
-                    @foreach (var curso in Model.Cursos)
-                    {
-                        <li>@curso.Nombre (@curso.Modalidad)</li>
-                    }
-                </ul>
-            </div>
-            <div class="col-6">
-                <h3>Grupos</h3>
-                <ul>
-                    @foreach (var grupo in Model.Grupos)
-                    {
-                        <li>@grupo.Nombre - @grupo.NivelEducativo</li>
-                    }
-                </ul>
-            </div>
-        </div>
+        <h2>Listado de Grupos</h2>
+        <ul>
+            @foreach (var grupo in Model.Grupos)
+            {
+                <li>@grupo.Nombre - @grupo.NivelEducativo</li>
+            }
+        </ul>
 
         <div class="section-break"></div>
 

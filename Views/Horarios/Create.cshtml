@@ -23,9 +23,14 @@
                     <div class="row g-3">
                         <div class="col-md-6">
                             <div class="form-group mb-3">
-                                <label asp-for="IdDocente" class="form-label d-flex align-items-center">
-                                    <i class='bx bx-user me-1'></i> Docente
-                                </label>
+                                <div class="d-flex justify-content-between align-items-center mb-1">
+                                    <label asp-for="IdDocente" class="form-label mb-0 d-flex align-items-center">
+                                        <i class='bx bx-user me-1'></i> Docente
+                                    </label>
+                                    <a href="javascript:void(0)" onclick="openQuickAddModal('@Url.Action("Create", "Docentes")', 'IdDocente')" class="text-decoration-none ms-1" title="Nuevo Docente">
+                                        <i class='bx bx-plus fw-bold'></i>
+                                    </a>
+                                </div>
                                 <select asp-for="IdDocente" class="form-control" asp-items="ViewBag.IdDocente">
                                     <option value="">-- Seleccione Docente --</option>
                                 </select>
@@ -34,9 +39,14 @@
                         </div>
                         <div class="col-md-6">
                             <div class="form-group mb-3">
-                                <label asp-for="IdAsignatura" class="form-label d-flex align-items-center">
-                                    <i class='bx bx-book me-1'></i> Asignatura
-                                </label>
+                                <div class="d-flex justify-content-between align-items-center mb-1">
+                                    <label asp-for="IdAsignatura" class="form-label mb-0 d-flex align-items-center">
+                                        <i class='bx bx-book me-1'></i> Asignatura
+                                    </label>
+                                    <a href="javascript:void(0)" onclick="openQuickAddModal('@Url.Action("Create", "Asignaturas")', 'IdAsignatura')" class="text-decoration-none ms-1" title="Nueva Asignatura">
+                                        <i class='bx bx-plus fw-bold'></i>
+                                    </a>
+                                </div>
                                 <select asp-for="IdAsignatura" class="form-control" asp-items="ViewBag.IdAsignatura">
                                     <option value="">-- Seleccione Asignatura --</option>
                                 </select>
@@ -46,9 +56,14 @@
 
                         <div class="col-md-6">
                             <div class="form-group mb-3">
-                                <label asp-for="IdAula" class="form-label d-flex align-items-center">
-                                    <i class='bx bx-door-open me-1'></i> Aula
-                                </label>
+                                <div class="d-flex justify-content-between align-items-center mb-1">
+                                    <label asp-for="IdAula" class="form-label mb-0 d-flex align-items-center">
+                                        <i class='bx bx-door-open me-1'></i> Aula
+                                    </label>
+                                    <a href="javascript:void(0)" onclick="openQuickAddModal('@Url.Action("Create", "Aulas")', 'IdAula')" class="text-decoration-none ms-1" title="Nueva Aula">
+                                        <i class='bx bx-plus fw-bold'></i>
+                                    </a>
+                                </div>
                                 <select asp-for="IdAula" class="form-control" asp-items="ViewBag.IdAula">
                                     <option value="">-- Seleccione Aula --</option>
                                 </select>
@@ -57,9 +72,14 @@
                         </div>
                         <div class="col-md-6">
                             <div class="form-group mb-3">
-                                <label asp-for="IdGrupo" class="form-label d-flex align-items-center">
-                                    <i class='bx bx-group me-1'></i> Grupo
-                                </label>
+                                <div class="d-flex justify-content-between align-items-center mb-1">
+                                    <label asp-for="IdGrupo" class="form-label mb-0 d-flex align-items-center">
+                                        <i class='bx bx-group me-1'></i> Grupo
+                                    </label>
+                                    <a href="javascript:void(0)" onclick="openQuickAddModal('@Url.Action("Create", "Grupos")', 'IdGrupo')" class="text-decoration-none ms-1" title="Nuevo Grupo">
+                                        <i class='bx bx-plus fw-bold'></i>
+                                    </a>
+                                </div>
                                 <select asp-for="IdGrupo" class="form-control" asp-items="ViewBag.IdGrupo">
                                     <option value="">-- Seleccione Grupo --</option>
                                 </select>
@@ -117,6 +137,159 @@
     </div>
 </div>
 
+<!-- Modal Genérico para Creación Rápida -->
+<div class="modal fade" id="quickAddModal" tabindex="-1" aria-labelledby="quickAddModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-md modal-dialog-centered">
+        <div class="modal-content shadow-lg border-0 rounded-4">
+            <div class="modal-header border-bottom-0 pb-0 pt-4 px-4 d-flex align-items-center">
+                <i id="modalIcon" class='bx bx-plus-circle text-primary me-2' style="font-size: 1.5rem;"></i>
+                <h5 class="modal-title fw-bold mb-0" id="quickAddModalLabel">Agregar</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-4" id="modalContentContainer">
+                <div class="p-5 text-center">
+                    <div class="spinner-border text-primary" role="status">
+                        <span class="visually-hidden">Cargando...</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* Refinamientos para el contenido cargado en el Modal */
+    #modalContentContainer .card {
+        border: none !important;
+        box-shadow: none !important;
+        margin-top: 0 !important;
+    }
+    #modalContentContainer .card-header {
+        display: none !important; /* El título se maneja en el header del modal */
+    }
+    #modalContentContainer .card-body {
+        padding: 0 !important;
+    }
+    #modalContentContainer .row, 
+    #modalContentContainer .col-md-10, 
+    #modalContentContainer .col-lg-7 {
+        width: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        max-width: 100% !important;
+    }
+    #modalContentContainer .btn-light {
+        display: none !important; /* Ocultar botón 'Volver' en el modal */
+    }
+    #modalContentContainer .border-top {
+        border-top: 1px solid var(--border-color) !important;
+        margin-top: 1.5rem !important;
+        padding-top: 1.5rem !important;
+    }
+    #modalContentContainer .btn-primary {
+        width: 100% !important;
+        padding-top: 0.75rem !important;
+        padding-bottom: 0.75rem !important;
+    }
+</style>
+
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script>
+        let currentTargetSelect = null;
+
+        function openQuickAddModal(url, targetSelect) {
+            currentTargetSelect = targetSelect;
+            const modalElement = document.getElementById('quickAddModal');
+            const modal = new bootstrap.Modal(modalElement);
+            const container = document.getElementById('modalContentContainer');
+            const modalTitle = document.getElementById('quickAddModalLabel');
+            const modalIcon = document.getElementById('modalIcon');
+            
+            // Títulos e iconos por defecto basados en el target
+            const titles = {
+                'IdDocente': { text: 'Nuevo Docente', icon: 'bx-user-plus' },
+                'IdAsignatura': { text: 'Nueva Asignatura', icon: 'bx-book-add' },
+                'IdAula': { text: 'Nueva Aula', icon: 'bx-door-open' },
+                'IdGrupo': { text: 'Nuevo Grupo', icon: 'bx-group-plus' }
+            };
+
+            const config = titles[targetSelect] || { text: 'Agregar', icon: 'bx-plus-circle' };
+            modalTitle.innerText = config.text;
+            modalIcon.className = `bx ${config.icon} text-primary me-2`;
+
+            // Limpiar contenido previo y mostrar spinner
+            container.innerHTML = '<div class="p-5 text-center"><div class="spinner-border text-primary" role="status"></div><p class="mt-2 text-muted">Cargando formulario...</p></div>';
+            
+            modal.show();
+
+            fetch(url, {
+                headers: { 'X-Requested-With': 'XMLHttpRequest' }
+            })
+            .then(response => response.text())
+            .then(html => {
+                container.innerHTML = html;
+                setupModalForm(url);
+            })
+            .catch(error => {
+                console.error('Error carregando modal:', error);
+                container.innerHTML = '<div class="alert alert-danger">Error al cargar el formulario.</div>';
+            });
+        }
+
+        function setupModalForm(baseUri) {
+            const container = document.getElementById('modalContentContainer');
+            const form = container.querySelector('form');
+            if (!form) return;
+
+            // Ocultar botones de navegación originales (Volver)
+            const backBtn = container.querySelector('a.btn-light');
+            if (backBtn) backBtn.style.display = 'none';
+            
+            // Ajustar el header si es un card
+            const card = container.querySelector('.card');
+            if (card) {
+                card.classList.remove('shadow-sm', 'mt-4');
+                card.style.border = 'none';
+            }
+
+            form.addEventListener('submit', function (e) {
+                e.preventDefault();
+                const formData = new FormData(form);
+
+                fetch(form.action || baseUri, {
+                    method: 'POST',
+                    body: formData,
+                    headers: { 'X-Requested-With': 'XMLHttpRequest' }
+                })
+                .then(response => {
+                    const contentType = response.headers.get("content-type");
+                    if (contentType && contentType.indexOf("application/json") !== -1) {
+                        return response.json().then(data => ({ isJson: true, data }));
+                    } else {
+                        return response.text().then(html => ({ isJson: false, html }));
+                    }
+                })
+                .then(res => {
+                    if (res.isJson && res.data.success) {
+                        // Éxito: Cerrar modal y actualizar dropdown
+                        const select = document.getElementById(currentTargetSelect);
+                        const newOption = new Option(res.data.name, res.data.id, true, true);
+                        select.add(newOption);
+                        $(select).trigger('change'); // Por si usa select2 u otros
+                        
+                        bootstrap.Modal.getInstance(document.getElementById('quickAddModal')).hide();
+                    } else {
+                        // Error de validación: Recargar contenido del modal con el HTML devuelto
+                        container.innerHTML = res.html;
+                        setupModalForm(baseUri);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error enviando formulario:', error);
+                });
+            });
+        }
+    </script>
 }

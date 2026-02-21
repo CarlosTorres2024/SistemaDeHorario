@@ -36,30 +36,7 @@
                                 <label asp-for="Especialidad" class="form-label d-flex align-items-center">
                                     <i class='bx bx-bookmark-alt me-1'></i> Especialidad
                                 </label>
-                                <div class="input-group">
-                                    <input asp-for="Especialidad" id="especialidadInput" class="form-control border-end-0" placeholder="Ej. Matemáticas, Ciencias..." />
-                                    <button class="btn btn-outline-light border border-start-0 bg-white dropdown-toggle text-secondary" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                        <i class='bx bx-plus-circle text-primary'></i>
-                                    </button>
-                                    <ul class="dropdown-menu dropdown-menu-end shadow-sm border-0 py-2 mt-1" style="max-height: 250px; overflow-y: auto; min-width: 250px;">
-                                        <li class="dropdown-header border-bottom mb-2 pb-2 text-primary fw-bold">
-                                            <i class='bx bx-list-ul me-1'></i> Sugerir Asignatura
-                                        </li>
-                                        @if (ViewBag.Asignaturas != null)
-                                        {
-                                            foreach (var asignatura in (IEnumerable<SistemaGestionHorarios.Models.Asignatura>)ViewBag.Asignaturas)
-                                            {
-                                                <li><a class="dropdown-item py-2 d-flex align-items-center" href="javascript:void(0)" onclick="appendAsignatura('@asignatura.Nombre')">
-                                                    <i class='bx bx-plus me-2 text-muted small'></i> @asignatura.Nombre
-                                                </a></li>
-                                            }
-                                            if (!((IEnumerable<SistemaGestionHorarios.Models.Asignatura>)ViewBag.Asignaturas).Any())
-                                            {
-                                                <li><span class="dropdown-item text-muted small px-3">No hay asignaturas creadas</span></li>
-                                            }
-                                        }
-                                    </ul>
-                                </div>
+                                <input asp-for="Especialidad" class="form-control" placeholder="Ej. Matemáticas, Ciencias..." />
                                 <span asp-validation-for="Especialidad" class="text-danger small"></span>
                             </div>
                         </div>
@@ -90,20 +67,4 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-    
-    <script>
-        function appendAsignatura(nombre) {
-            const input = document.getElementById('especialidadInput');
-            const currentVal = input.value.trim();
-            if (currentVal === "") {
-                input.value = nombre;
-            } else {
-                const parts = currentVal.split(',').map(s => s.trim());
-                if (!parts.includes(nombre)) {
-                    input.value = currentVal + ", " + nombre;
-                }
-            }
-            input.focus();
-        }
-    </script>
 }

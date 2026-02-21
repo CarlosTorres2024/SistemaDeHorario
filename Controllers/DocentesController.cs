@@ -31,6 +31,7 @@ namespace SistemaGestionHorarios.Controllers
         public IActionResult Create()
         {
             ViewBag.Asignaturas = _context.Asignaturas.AsNoTracking().OrderBy(a => a.Nombre).ToList();
+            if (Request.Headers["X-Requested-With"] == "XMLHttpRequest") return PartialView();
             return View();
         }
 
@@ -43,10 +44,37 @@ namespace SistemaGestionHorarios.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(docente);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                // Validación de calidad de datos
+                if (docente.Nombre.Length < 3)
+                {
+                    ModelState.AddModelError("Nombre", "El nombre debe tener al menos 3 caracteres.");
+                }
+                // Validación de duplicado
+                else if (_context.Docentes.Any(d => d.Nombre.ToLower() == docente.Nombre.ToLower()))
+                {
+                    ModelState.AddModelError("Nombre", "Ya existe un docente registrado con este nombre.");
+                }
+                else
+                {
+                    _context.Add(docente);
+                    await _context.SaveChangesAsync();
+                    
+                    if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+                    {
+                        return Json(new { success = true, id = docente.IdDocente, name = docente.Nombre });
+                    }
+                    
+                    return RedirectToAction(nameof(Index));
+                }
             }
+            
+            ViewBag.Asignaturas = _context.Asignaturas.AsNoTracking().OrderBy(a => a.Nombre).ToList();
+            
+            if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+            {
+                return PartialView(docente);
+            }
+            
             return View(docente);
         }
 
@@ -75,17 +103,30 @@ namespace SistemaGestionHorarios.Controllers
 
             if (ModelState.IsValid)
             {
-                try
+                // Validación de calidad de datos
+                if (docente.Nombre.Length < 3)
                 {
-                    _context.Update(docente);
-                    await _context.SaveChangesAsync();
+                    ModelState.AddModelError("Nombre", "El nombre debe tener al menos 3 caracteres.");
                 }
-                catch (DbUpdateConcurrencyException)
+                // Validación de duplicado
+                else if (_context.Docentes.Any(d => d.Nombre.ToLower() == docente.Nombre.ToLower() && d.IdDocente != docente.IdDocente))
                 {
-                    if (!DocenteExists(docente.IdDocente)) return NotFound();
-                    else throw;
+                    ModelState.AddModelError("Nombre", "Ya existe otro docente con este nombre.");
                 }
-                return RedirectToAction(nameof(Index));
+                else
+                {
+                    try
+                    {
+                        _context.Update(docente);
+                        await _context.SaveChangesAsync();
+                    }
+                    catch (DbUpdateConcurrencyException)
+                    {
+                        if (!DocenteExists(docente.IdDocente)) return NotFound();
+                        else throw;
+                    }
+                    return RedirectToAction(nameof(Index));
+                }
             }
             return View(docente);
         }

@@ -13,9 +13,8 @@ namespace SistemaGestionHorarios.Data
         public DbSet<Asignatura> Asignaturas { get; set; }
         public DbSet<Aula> Aulas { get; set; }
         public DbSet<Grupo> Grupos { get; set; }
-        public DbSet<Curso> Cursos { get; set; }
-        public DbSet<CentroEducativo> CentrosEducativos { get; set; }
         public DbSet<Horario> Horarios { get; set; }
+        public DbSet<CentroEducativo> CentroEducativo { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

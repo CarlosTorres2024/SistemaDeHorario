@@ -1,0 +1,60 @@
+@model SistemaGestionHorarios.Models.CentroEducativo
+
+@{
+    ViewData["Title"] = "Centro Educativo";
+}
+
+<div class="py-5">
+    <div class="d-flex justify-content-between align-items-center mb-5">
+        <div>
+            <h1 class="h3 fw-bold mb-1">Centro Educativo</h1>
+            <p class="text-secondary small">Información general de la institución.</p>
+        </div>
+        <div>
+            <a asp-action="Edit" asp-route-id="@Model?.Id" class="btn btn-primary d-flex align-items-center gap-2">
+                <i class='bx bx-edit'></i>
+                <span>Editar Información</span>
+            </a>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-md-4">
+            <div class="bg-white p-4 border rounded shadow-sm">
+                <h2 class="h5 fw-bold mb-3 border-bottom pb-2">Datos de Contacto</h2>
+                <div class="mb-3">
+                    <label class="text-secondary small d-block">Nombre</label>
+                    <p class="fw-semibold">@Model?.Nombre</p>
+                </div>
+                <div class="mb-3">
+                    <label class="text-secondary small d-block">Dirección</label>
+                    <p>@Model?.Direccion</p>
+                </div>
+                <div class="mb-3">
+                    <label class="text-secondary small d-block">Teléfono</label>
+                    <p>@Model?.Telefono</p>
+                </div>
+                <div class="mb-0">
+                    <label class="text-secondary small d-block">Correo</label>
+                    <p>@Model?.Correo</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-8">
+            <div class="bg-white p-4 border rounded shadow-sm mb-4">
+                <h2 class="h5 fw-bold mb-3 border-bottom pb-2">Misión</h2>
+                <p class="text-secondary">@Model?.Mision</p>
+            </div>
+            <div class="bg-white p-4 border rounded shadow-sm">
+                <h2 class="h5 fw-bold mb-3 border-bottom pb-2">Visión</h2>
+                <p class="text-secondary">@Model?.Vision</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="mt-4 text-center">
+        <a asp-controller="Home" asp-action="Index" class="btn btn-outline-secondary">
+            <i class='bx bx-arrow-back'></i> Volver al Inicio
+        </a>
+    </div>
+</div>

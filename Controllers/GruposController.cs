@@ -21,7 +21,7 @@ namespace SistemaGestionHorarios.Controllers
 
         public IActionResult Create()
         {
-            ViewBag.Cursos = _context.Cursos.AsNoTracking().OrderBy(c => c.Nombre).ToList();
+            if (Request.Headers["X-Requested-With"] == "XMLHttpRequest") return PartialView();
             return View();
         }
 
@@ -31,10 +31,39 @@ namespace SistemaGestionHorarios.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(grupo);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                // Validación de calidad de datos
+                if (grupo.Nombre.Length < 1)
+                {
+                    ModelState.AddModelError("Nombre", "El nombre del grupo no puede estar vacío.");
+                }
+                else if (grupo.NivelEducativo?.Length < 3)
+                {
+                    ModelState.AddModelError("NivelEducativo", "El nivel educativo debe tener al menos 3 caracteres.");
+                }
+                // Validación de duplicado
+                else if (_context.Grupos.Any(g => g.Nombre.ToLower() == grupo.Nombre.ToLower()))
+                {
+                    ModelState.AddModelError("Nombre", "Ya existe un grupo registrado con este nombre.");
+                }
+                else
+                {
+                    _context.Add(grupo);
+                    await _context.SaveChangesAsync();
+                    
+                    if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+                    {
+                        return Json(new { success = true, id = grupo.IdGrupo, name = grupo.Nombre });
+                    }
+                    
+                    return RedirectToAction(nameof(Index));
+                }
             }
+            
+            if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+            {
+                return PartialView(grupo);
+            }
+            
             return View(grupo);
         }
 
@@ -45,7 +74,6 @@ namespace SistemaGestionHorarios.Controllers
             var grupo = await _context.Grupos.FindAsync(id);
             if (grupo == null) return NotFound();
             
-            ViewBag.Cursos = _context.Cursos.AsNoTracking().OrderBy(c => c.Nombre).ToList();
             return View(grupo);
         }
 
@@ -57,17 +85,34 @@ namespace SistemaGestionHorarios.Controllers
 
             if (ModelState.IsValid)
             {
-                try
+                // Validación de calidad de datos
+                if (grupo.Nombre.Length < 1)
                 {
-                    _context.Update(grupo);
-                    await _context.SaveChangesAsync();
+                    ModelState.AddModelError("Nombre", "El nombre del grupo no puede estar vacío.");
                 }
-                catch (DbUpdateConcurrencyException)
+                else if (grupo.NivelEducativo?.Length < 3)
                 {
-                    if (!GrupoExists(grupo.IdGrupo)) return NotFound();
-                    else throw;
+                    ModelState.AddModelError("NivelEducativo", "El nivel educativo debe tener al menos 3 caracteres.");
                 }
-                return RedirectToAction(nameof(Index));
+                // Validación de duplicado
+                else if (_context.Grupos.Any(g => g.Nombre.ToLower() == grupo.Nombre.ToLower() && g.IdGrupo != grupo.IdGrupo))
+                {
+                    ModelState.AddModelError("Nombre", "Ya existe otro grupo con este nombre.");
+                }
+                else
+                {
+                    try
+                    {
+                        _context.Update(grupo);
+                        await _context.SaveChangesAsync();
+                    }
+                    catch (DbUpdateConcurrencyException)
+                    {
+                        if (!GrupoExists(grupo.IdGrupo)) return NotFound();
+                        else throw;
+                    }
+                    return RedirectToAction(nameof(Index));
+                }
             }
             return View(grupo);
         }

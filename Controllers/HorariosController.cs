@@ -64,23 +64,35 @@ namespace SistemaGestionHorarios.Controllers
         {
             if (ModelState.IsValid)
             {
+                // 0. Validar Coherencia de Tiempo
+                if (horario.HoraFin <= horario.HoraInicio)
+                {
+                    ModelState.AddModelError(string.Empty, "La hora de finalización debe ser posterior a la hora de inicio.");
+                }
+                else if ((horario.HoraFin - horario.HoraInicio).TotalMinutes < 20)
+                {
+                    ModelState.AddModelError(string.Empty, "La duración mínima de una sesión debe ser de 20 minutos.");
+                }
                 // 1. Validar Choque de Horario (Docente, Aula, Grupo)
-                var conflict = await GetConflictMessageAsync(horario);
-                if (conflict != null)
+                else 
                 {
-                    ModelState.AddModelError(string.Empty, conflict);
-                }
-                // 2. Validar Horas Máximas del Docente
-                else if (await ExceedsMaxHoursAsync(horario))
-                {
-                    var docente = await _context.Docentes.FindAsync(horario.IdDocente);
-                    ModelState.AddModelError(string.Empty, $"Lo sentimos, el docente ya ha alcanzado o superaría su límite de horas semanales ({docente?.HorasMaximas} horas).");
-                }
-                else
-                {
-                    _context.Add(horario);
-                    await _context.SaveChangesAsync();
-                    return RedirectToAction(nameof(Index));
+                    var conflict = await GetConflictMessageAsync(horario);
+                    if (conflict != null)
+                    {
+                        ModelState.AddModelError(string.Empty, conflict);
+                    }
+                    // 2. Validar Horas Máximas del Docente
+                    else if (await ExceedsMaxHoursAsync(horario))
+                    {
+                        var docente = await _context.Docentes.FindAsync(horario.IdDocente);
+                        ModelState.AddModelError(string.Empty, $"Lo sentimos, el docente ya ha alcanzado o superaría su límite de horas semanales ({docente?.HorasMaximas} horas).");
+                    }
+                    else
+                    {
+                        _context.Add(horario);
+                        await _context.SaveChangesAsync();
+                        return RedirectToAction(nameof(Index));
+                    }
                 }
             }
             ViewData["IdAsignatura"] = new SelectList(await _context.Asignaturas.AsNoTracking().ToListAsync(), "IdAsignatura", "Nombre", horario.IdAsignatura);
@@ -113,30 +125,42 @@ namespace SistemaGestionHorarios.Controllers
 
             if (ModelState.IsValid)
             {
+                // 0. Validar Coherencia de Tiempo
+                if (horario.HoraFin <= horario.HoraInicio)
+                {
+                    ModelState.AddModelError(string.Empty, "La hora de finalización debe ser posterior a la hora de inicio.");
+                }
+                else if ((horario.HoraFin - horario.HoraInicio).TotalMinutes < 20)
+                {
+                    ModelState.AddModelError(string.Empty, "La duración mínima de una sesión debe ser de 20 minutos.");
+                }
                 // 1. Validar Choque de Horario
-                var conflict = await GetConflictMessageAsync(horario);
-                if (conflict != null)
+                else 
                 {
-                    ModelState.AddModelError(string.Empty, conflict);
-                }
-                // 2. Validar Horas Máximas
-                else if (await ExceedsMaxHoursAsync(horario))
-                {
-                    var docente = await _context.Docentes.FindAsync(horario.IdDocente);
-                    ModelState.AddModelError(string.Empty, $"Atención: El docente superaría su límite establecido de {docente?.HorasMaximas} horas semanales.");
-                }
-                else
-                {
-                    try
+                    var conflict = await GetConflictMessageAsync(horario);
+                    if (conflict != null)
                     {
-                        _context.Update(horario);
-                        await _context.SaveChangesAsync();
-                        return RedirectToAction(nameof(Index));
+                        ModelState.AddModelError(string.Empty, conflict);
                     }
-                    catch (DbUpdateConcurrencyException)
+                    // 2. Validar Horas Máximas
+                    else if (await ExceedsMaxHoursAsync(horario))
                     {
-                        if (!await HorarioExistsAsync(horario.IdHorario)) return NotFound();
-                        else throw;
+                        var docente = await _context.Docentes.FindAsync(horario.IdDocente);
+                        ModelState.AddModelError(string.Empty, $"Atención: El docente superaría su límite establecido de {docente?.HorasMaximas} horas semanales.");
+                    }
+                    else
+                    {
+                        try
+                        {
+                            _context.Update(horario);
+                            await _context.SaveChangesAsync();
+                            return RedirectToAction(nameof(Index));
+                        }
+                        catch (DbUpdateConcurrencyException)
+                        {
+                            if (!await HorarioExistsAsync(horario.IdHorario)) return NotFound();
+                            else throw;
+                        }
                     }
                 }
             }

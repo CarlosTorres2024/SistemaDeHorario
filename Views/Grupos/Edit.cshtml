@@ -37,30 +37,7 @@
                                 <label asp-for="NivelEducativo" class="form-label d-flex align-items-center">
                                     <i class='bx bx-layer me-1'></i> Nivel Educativo
                                 </label>
-                                <div class="input-group">
-                                    <input asp-for="NivelEducativo" id="nivelInput" class="form-control border-end-0" placeholder="Ej. Primaria, Secundaria..." />
-                                    <button class="btn btn-outline-light border border-start-0 bg-white dropdown-toggle text-secondary" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                        <i class='bx bx-plus-circle text-primary'></i>
-                                    </button>
-                                    <ul class="dropdown-menu dropdown-menu-end shadow-sm border-0 py-2 mt-1" style="max-height: 250px; overflow-y: auto; min-width: 250px;">
-                                        <li class="dropdown-header border-bottom mb-2 pb-2 text-primary fw-bold">
-                                            <i class='bx bx-book-open me-1'></i> Sugerir Nivel (Curso)
-                                        </li>
-                                        @if (ViewBag.Cursos != null)
-                                        {
-                                            foreach (var curso in (IEnumerable<SistemaGestionHorarios.Models.Curso>)ViewBag.Cursos)
-                                            {
-                                                <li><a class="dropdown-item py-2 d-flex align-items-center" href="javascript:void(0)" onclick="selectValue('nivelInput', '@curso.Nombre')">
-                                                    <i class='bx bx-plus me-2 text-muted small'></i> @curso.Nombre
-                                                </a></li>
-                                            }
-                                        }
-                                        <li class="dropdown-header border-bottom my-2 pb-2 text-secondary small">Basicos</li>
-                                        <li><a class="dropdown-item py-2" href="javascript:void(0)" onclick="selectValue('nivelInput', 'Primaria')">Primaria</a></li>
-                                        <li><a class="dropdown-item py-2" href="javascript:void(0)" onclick="selectValue('nivelInput', 'Secundaria')">Secundaria</a></li>
-                                        <li><a class="dropdown-item py-2" href="javascript:void(0)" onclick="selectValue('nivelInput', 'Técnica')">Técnica</a></li>
-                                    </ul>
-                                </div>
+                                <input asp-for="NivelEducativo" class="form-control" placeholder="Ej. Primaria, Secundaria..." />
                                 <span asp-validation-for="NivelEducativo" class="text-danger small"></span>
                             </div>
                         </div>
@@ -82,10 +59,4 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-    <script>
-        function selectValue(inputId, value) {
-            document.getElementById(inputId).value = value;
-            document.getElementById(inputId).focus();
-        }
-    </script>
 }

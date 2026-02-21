@@ -21,9 +21,7 @@ namespace SistemaGestionHorarios.Controllers
             // Obtener todos los datos necesarios para el reporte
             var docentes = await _context.Docentes.ToListAsync();
             var asignaturas = await _context.Asignaturas.ToListAsync();
-            var cursos = await _context.Cursos.ToListAsync();
             var grupos = await _context.Grupos.ToListAsync();
-            var centro = await _context.CentrosEducativos.FirstOrDefaultAsync();
             var horarios = await _context.Horarios
                 .Include(h => h.Docente)
                 .Include(h => h.Asignatura)
@@ -38,9 +36,7 @@ namespace SistemaGestionHorarios.Controllers
             {
                 Docentes = docentes,
                 Asignaturas = asignaturas,
-                Cursos = cursos,
                 Grupos = grupos,
-                Centro = centro,
                 Horarios = horarios,
                 FechaGeneracion = DateTime.Now
             };
