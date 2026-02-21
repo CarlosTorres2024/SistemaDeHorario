@@ -49,12 +49,6 @@ if (!app.Environment.IsDevelopment())
     app.UseResponseCompression();
 }
 
-// Configurar Rotativa (usar app.Environment, no builder.Environment después de Build())
-var rotativaPath = Path.Combine(app.Environment.WebRootPath, "Rotativa");
-if (Directory.Exists(rotativaPath))
-{
-    Rotativa.AspNetCore.RotativaConfiguration.Setup(app.Environment.WebRootPath);
-}
 
 app.UseRouting();
 

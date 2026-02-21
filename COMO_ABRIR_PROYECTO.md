@@ -43,5 +43,4 @@ Si necesita usar una instancia propia de SQL Server (como `SQLEXPRESS` o un serv
 4. Guarde los cambios y ejecute el proyecto (`F5`). El sistema creará las tablas automáticamente.
 
 ## 4. Solución de Problemas Comunes
-- **Error de PDF**: Si al generar el reporte PDF obtiene un error, asegúrese de que la carpeta `Rotativa` (con `wkhtmltopdf.exe`) exista en `wwwroot`.
 - **Base de datos bloqueada**: Si recibe errores de base de datos en uso, asegúrese de no tener la tabla abierta en modo edición en VS mientras ejecuta el programa.
